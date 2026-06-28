@@ -9,7 +9,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.30.3
 	github.com/google/uuid v1.6.0
-	github.com/google/wire v0.7.0
+	github.com/google/wire v0.5.0
 	github.com/gookit/goutil v0.7.6
 	github.com/labstack/echo/v4 v4.15.3
 	github.com/labstack/gommon v0.5.0

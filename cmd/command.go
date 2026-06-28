@@ -1,4 +1,4 @@
-package codenomcmd
+package cmd
 
 import (
 	"fmt"

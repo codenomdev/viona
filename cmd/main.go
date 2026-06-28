@@ -1,4 +1,4 @@
-package codenomcmd
+package cmd
 
 import (
 	"context"
@@ -15,6 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// go build -ldflags "-X github.com/codenomdev/viona/cmd.Version=x.y.z"
 var (
 	// app version, please dont modify this
 	Version string = "0.0.0"
@@ -43,6 +44,10 @@ var (
 	// Time is the build time of the project
 	Time = ""
 )
+
+func Main() {
+	_ = rootCmd.Execute()
+}
 
 func Execute() {
 	// Root application context

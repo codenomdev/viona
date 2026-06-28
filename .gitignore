@@ -6,6 +6,8 @@
 *.db
 .DS_Store
 
+/codenom
+
 /config/config.dev.yaml
 /ui/node_modules
 /ui/build/*/*/*
