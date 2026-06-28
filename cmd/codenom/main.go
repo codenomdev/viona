@@ -1,7 +1,7 @@
 package main
 
-import "github.com/codenomdev/viona/cmd"
+import codenomcmd "github.com/codenomdev/viona/cmd"
 
 func main() {
-	cmd.Execute()
+	codenomcmd.Execute()
 }

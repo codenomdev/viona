@@ -1,4 +1,4 @@
-package cmd
+package codenomcmd
 
 import (
 	"fmt"
@@ -38,10 +38,10 @@ var (
 
 	buildCmd = &cobra.Command{
 		Use:   "build",
-		Short: "Build Answer with plugins",
-		Long:  `Build a new Answer with plugins that you need`,
+		Short: "Build Codenom with plugins",
+		Long:  `Build a new Codenom with plugins that you need`,
 		Run: func(_ *cobra.Command, _ []string) {
-			fmt.Printf("try to build a new answer with plugins:\n%s\n", strings.Join(buildWithPlugins, "\n"))
+			fmt.Printf("try to build a new codenom with plugins:\n%s\n", strings.Join(buildWithPlugins, "\n"))
 			err := cli.BuildNewCodenom(buildDir, buildOutput, buildWithPlugins, cli.OriginalCodenomInfo{
 				Version:  Version,
 				Revision: Revision,
@@ -52,7 +52,7 @@ var (
 				os.Exit(1)
 			}
 
-			fmt.Printf("build new answer successfully %s\n", buildOutput)
+			fmt.Printf("build new codenom successfully %s\n", buildOutput)
 		},
 	}
 
@@ -124,6 +124,7 @@ var (
 )
 
 func init() {
+	rootCmd.Version = fmt.Sprintf("%s\nrevision: %s\nbuild time: %s", Version, Revision, Time)
 	// rootCmd.PersistentFlags().StringVarP(&ConfigPath, "config", "c", "config.dev.yaml", "config path, eg: c name_config.yaml.")
 	buildCmd.Flags().StringSliceVarP(&buildWithPlugins, "with", "w", []string{}, "plugins needed to build")
 

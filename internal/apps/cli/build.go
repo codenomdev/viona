@@ -215,7 +215,7 @@ func buildUI(b *buildingMaterial) (err error) {
 	return nil
 }
 
-// copyUIFiles copy ui files from answer module to tmp dir
+// copyUIFiles copy ui files from codenom module to tmp dir
 func copyUIFiles(b *buildingMaterial) (err error) {
 	goListCmd := b.newExecCmd("go", "list", "-mod=mod", "-m", "-f", "{{.Dir}}", "github.com/codenomdev/viona")
 	buf := new(bytes.Buffer)
@@ -224,8 +224,8 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 		return fmt.Errorf("failed to run go list: %w", err)
 	}
 
-	answerDir := strings.TrimSpace(buf.String())
-	goModUIDir := filepath.Join(answerDir, "ui")
+	vionaDir := strings.TrimSpace(buf.String())
+	goModUIDir := filepath.Join(vionaDir, "ui")
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/codenomdev/viona/ui/")
 	// The node_modules folder generated during development will interfere packaging, so it needs to be ignored.
 	if err = copyDirEntries(os.DirFS(goModUIDir), ".", localUIBuildDir, "node_modules"); err != nil {

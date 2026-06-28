@@ -1,7 +1,7 @@
 //go:build wireinject
 // +build wireinject
 
-package cmd
+package codenomcmd
 
 import (
 	"context"

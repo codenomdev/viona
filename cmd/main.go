@@ -1,4 +1,4 @@
-package cmd
+package codenomcmd
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 
 var (
 	// app version, please dont modify this
-	Version string = "beta-alpha"
+	Version string = "0.0.0"
 
 	// config path
 	ConfigPath string

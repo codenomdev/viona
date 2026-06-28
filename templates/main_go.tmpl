@@ -1,7 +1,7 @@
 package main
 
 import (
-	codenomCmd "github.com/codenomdev/viona/cmd"
+	codenomcmd "github.com/codenomdev/viona/cmd"
 
   // remote plugins
 	{{- range .remote_plugins}}
@@ -14,5 +14,5 @@ import (
 	{{- end}}
 )
 func main() {
-	codenomCmd.Execute()
+	codenomcmd.Execute()
 }

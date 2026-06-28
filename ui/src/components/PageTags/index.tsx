@@ -23,7 +23,7 @@ const Index: FC = () => {
     if (generatorMetaNode) {
       generatorMetaNode.setAttribute(
         'content',
-        `Answer ${appVersion} - https://github.com/apache/answer version ${hashVersion}`,
+        `Codenom ${appVersion} - https://github.com/codenomdev/viona version ${hashVersion}`,
       );
     }
   };
