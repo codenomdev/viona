@@ -18,7 +18,7 @@ import (
 // go build -ldflags "-X github.com/codenomdev/viona/cmd.Version=x.y.z"
 var (
 	// app version, please dont modify this
-	Version string = "0.0.0"
+	Version string = "development"
 
 	// config path
 	ConfigPath string
