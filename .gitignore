@@ -8,7 +8,7 @@
 
 /codenom
 
-/config/config.dev.yaml
+/config/config-dev.yaml
 /ui/node_modules
 /ui/build/*/*/*
 /ui/build/*.json

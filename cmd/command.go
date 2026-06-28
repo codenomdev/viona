@@ -145,7 +145,7 @@ func init() {
 		&ConfigPath,
 		"config",
 		"c",
-		"config.dev.yaml",
+		"config.yaml",
 		"config path",
 	)
 

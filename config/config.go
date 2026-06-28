@@ -2,5 +2,5 @@ package config
 
 import "embed"
 
-//go:embed  config.*.yaml
+//go:embed  config.yaml
 var DefaultConfig embed.FS
