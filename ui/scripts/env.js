@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const configFilePath = path.resolve(__dirname, '../../config/config.dev.yaml');
+const configFilePath = path.resolve(__dirname, '../../config/config.yaml');
 const envFilePath = path.resolve(__dirname, '../.env.production');
 
 // Read config.yaml file
