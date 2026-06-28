@@ -19,7 +19,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const goModTpl = `module github.com/codenomdev/viona
+const goModTpl = `module viona
 go 1.25.1
 `
 

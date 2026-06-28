@@ -1,4 +1,4 @@
-VERSION=2.0.1
+VERSION=development
 BIN=codenom
 DIR_SRC=./cmd/codenom
 
