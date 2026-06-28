@@ -1,0 +1,28 @@
+package seeders
+
+import (
+	"github.com/go-gormigrate/gormigrate/v2"
+	"gorm.io/gorm"
+)
+
+func init() {
+	s := &gormigrate.Migration{}
+
+	s.ID = "{{ .ID }}_{{ .Name }}"
+
+	s.Migrate = func(db *gorm.DB) error {
+		// TODO: implement seed
+
+		LogSuccess(s.ID)
+		return nil
+	}
+
+	s.Rollback = func(db *gorm.DB) error {
+		// TODO: implement rollback
+
+		LogSuccess(s.ID)
+		return nil
+	}
+
+	AddSeed(s)
+}

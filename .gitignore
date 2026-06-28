@@ -1,0 +1,25 @@
+*.exe
+*.orig
+*.rej
+*.so
+*~
+*.db
+.DS_Store
+
+/config/config.dev.yaml
+/ui/node_modules
+/ui/build/*/*/*
+/ui/build/*.json
+/ui/build/*.html
+/ui/build/*.txt
+/vendor
+vendor/
+
+build/tools/
+dist/
+
+# Lint setup generated file
+.husky/
+
+# Environment variables
+.env

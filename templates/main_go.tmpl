@@ -1,0 +1,18 @@
+package main
+
+import (
+	codenomCmd "github.com/codenomdev/viona/cmd"
+
+  // remote plugins
+	{{- range .remote_plugins}}
+	_ "{{.}}"
+	{{- end}}
+
+  // local plugins
+	{{- range .local_plugins}}
+	_ "viona/{{.}}"
+	{{- end}}
+)
+func main() {
+	codenomCmd.Execute()
+}
