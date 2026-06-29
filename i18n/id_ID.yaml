@@ -1,0 +1,12 @@
+backend:
+  action:
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
+
+ui:
