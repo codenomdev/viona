@@ -21,6 +21,8 @@ type Config struct {
 	SONYFLAKE SonyflakeConfig `yaml:"SONYFLAKE"`
 	// UI
 	UI UIConfig `yaml:"UI"`
+	//lang
+	I18N I18NConfig `yaml:"I18N"`
 }
 
 type depsKey struct{}
@@ -32,6 +34,7 @@ func LoadConfig(filename string, logger log.Logger) (*Config, error) {
 		POSTGRES:  DatabaseConfigInit(),
 		SONYFLAKE: NewSonyFlakeInit(),
 		UI:        UIConfigInit(),
+		I18N:      *I18NConfigInit(),
 	}
 
 	// get config validate
@@ -86,6 +89,11 @@ func LoadConfig(filename string, logger log.Logger) (*Config, error) {
 		return nil, err
 	}
 
+	// load lang from environment
+	if err := env.New("I18N_", logFn).Load(&c.I18N); err != nil {
+		return nil, err
+	}
+
 	return &c, nil
 }
 
@@ -95,9 +103,9 @@ func ValidateConfEnv(configPath string) string {
 	flag := "config"
 	switch os.Getenv("APP_ENV") {
 	case "dev", "development": // get identity environment, can "dev" or "development"
-		return fmt.Sprintf("%s.dev.yaml", flag)
-	case "prod", "production": // get identity environment, can "prod" or "production"
-		return fmt.Sprintf("%s.prod.yaml", flag)
+		return fmt.Sprintf("%s-dev.yaml", flag)
+	// case "prod", "production": // get identity environment, can "prod" or "production"
+	// 	return fmt.Sprintf("%s.prod.yaml", flag)
 	default:
 		return configPath
 	}

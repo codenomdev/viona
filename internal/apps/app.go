@@ -15,6 +15,7 @@ import (
 	"github.com/codenomdev/viona/pkg/config"
 	"github.com/codenomdev/viona/pkg/log"
 	"github.com/labstack/echo/v4"
+	"github.com/segmentfault/pacman/i18n"
 )
 
 const (
@@ -22,11 +23,12 @@ const (
 )
 
 type AppServer struct {
-	echo      *echo.Echo
-	cfg       *config.Config
-	log       log.Logger
-	apiRoutes *routes.RegisterApiRoutes
-	uiRoutes  *routes.UIRoutes
+	echo       *echo.Echo
+	cfg        *config.Config
+	log        log.Logger
+	apiRoutes  *routes.RegisterApiRoutes
+	uiRoutes   *routes.UIRoutes
+	translator i18n.Translator
 }
 
 // Server
@@ -35,13 +37,15 @@ func NewApp(
 	logger log.Logger,
 	apiRoutes *routes.RegisterApiRoutes,
 	uiRoutes *routes.UIRoutes,
+	translator i18n.Translator,
 ) *AppServer {
 	return &AppServer{
-		echo:      echo.New(),
-		cfg:       cfg,
-		log:       logger,
-		apiRoutes: apiRoutes,
-		uiRoutes:  uiRoutes,
+		echo:       echo.New(),
+		cfg:        cfg,
+		log:        logger,
+		apiRoutes:  apiRoutes,
+		uiRoutes:   uiRoutes,
+		translator: translator,
 	}
 }
 

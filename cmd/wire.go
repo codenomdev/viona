@@ -11,6 +11,7 @@ import (
 	"github.com/codenomdev/viona/internal/modules"
 	"github.com/codenomdev/viona/pkg/config"
 	"github.com/codenomdev/viona/pkg/log"
+	"github.com/codenomdev/viona/pkg/translator"
 	"github.com/google/wire"
 )
 
@@ -23,6 +24,7 @@ func initApplication(
 		routes.NewApiRoutes,
 		routes.NewUIRoutes,
 		modules.Provider,
+		translator.Provider,
 		apps.NewApp,
 	)
 	return nil, nil, nil
