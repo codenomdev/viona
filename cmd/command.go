@@ -125,7 +125,7 @@ var (
 
 func init() {
 	rootCmd.Version = fmt.Sprintf("%s\nrevision: %s\nbuild time: %s", Version, Revision, Time)
-	// rootCmd.PersistentFlags().StringVarP(&ConfigPath, "config", "c", "config.dev.yaml", "config path, eg: c name_config.yaml.")
+	// rootCmd.PersistentFlags().StringVarP(&ConfigPath, "config", "c", "config.yaml", "config path, eg: c name_config.yaml.")
 	buildCmd.Flags().StringSliceVarP(&buildWithPlugins, "with", "w", []string{}, "plugins needed to build")
 
 	buildCmd.Flags().StringVarP(&buildOutput, "output", "o", "", "build output path")

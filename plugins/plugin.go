@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"sync"
 
+	"github.com/segmentfault/pacman/i18n"
+
+	"github.com/codenomdev/viona/pkg/translator"
 	"github.com/labstack/echo/v4"
 	"github.com/segmentfault/pacman/cache"
 	"gorm.io/gorm"
@@ -117,14 +120,14 @@ func (m *statusManager) UnmarshalJSON(data []byte) error {
 }
 
 // Translate translates the key to the current language of the context
-// func Translate(ctx EchoContext, key string) string {
-// 	return translator.Tr(handler.GetLangByCtx(ctx.Request().Context()), key)
-// }
+func Translate(ctx EchoContext, key string) string {
+	return translator.Tr(translator.GetLangByCtx(ctx.Request().Context()), key)
+}
 
-// // TranslateWithData translates the key to the language with data
-// func TranslateWithData(lang i18n.Language, key string, data any) string {
-// 	return translator.TrWithData(lang, key, data)
-// }
+// TranslateWithData translates the key to the language with data
+func TranslateWithData(lang i18n.Language, key string, data any) string {
+	return translator.TrWithData(lang, key, data)
+}
 
 // TranslateFn presents a generator of translated string.
 // We use it to delegate the translation work outside the plugin.
@@ -136,17 +139,17 @@ type Translator struct {
 }
 
 // MakeTranslator generates a translator from the key
-// func MakeTranslator(key string) Translator {
-// 	t := func(ctx EchoContext) string {
-// 		return Translate(ctx, key)
-// 	}
-// 	return Translator{Fn: t}
-// }
+func MakeTranslator(key string) Translator {
+	t := func(ctx EchoContext) string {
+		return Translate(ctx, key)
+	}
+	return Translator{Fn: t}
+}
 
-// // Translate translates the key to the current language of the context
-// func (t Translator) Translate(ctx EchoContext) string {
-// 	if t.Fn == nil {
-// 		return ""
-// 	}
-// 	return t.Fn(ctx)
-// }
+// Translate translates the key to the current language of the context
+func (t Translator) Translate(ctx EchoContext) string {
+	if t.Fn == nil {
+		return ""
+	}
+	return t.Fn(ctx)
+}

@@ -6,6 +6,7 @@ import (
 	mainMiddleware "github.com/codenomdev/viona/internal/middleware"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/segmentfault/pacman/i18n"
 )
 
 func (s *AppServer) defaultRegisterMiddleware() {
@@ -40,6 +41,8 @@ func (s *AppServer) defaultRegisterMiddleware() {
 	}))
 
 	s.echo.Use(middleware.BodyLimit("2M"))
+
+	s.echo.Use(mainMiddleware.I18nMiddleware(i18n.DefaultLanguage))
 
 	// When SERVER_DEBUG set to true, we will dump request via middleware
 	s.echo.Use(mainMiddleware.DebugMiddleware)
