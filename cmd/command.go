@@ -36,6 +36,16 @@ var (
 		},
 	}
 
+	initCmd = &cobra.Command{
+		Use:   "init",
+		Short: "Initialize Answer",
+		Long:  `Initialize Answer with specified configuration`,
+		Run: func(_ *cobra.Command, _ []string) {
+			// check config file and database. if config file exists and database is already created, init done
+			cli.InstallI18nBundle(".", false)
+		},
+	}
+
 	buildCmd = &cobra.Command{
 		Use:   "build",
 		Short: "Build Codenom with plugins",
@@ -175,7 +185,9 @@ func init() {
 	)
 
 	// Register parent cmd
-	for _, cmd := range []*cobra.Command{serveCmd, migrateCmd, makeMigrationCmd, makeSeederCmd, seederCmd, pluginCmd, buildCmd, i18nCmd} {
+	for _, cmd := range []*cobra.Command{
+		serveCmd, migrateCmd, makeMigrationCmd, makeSeederCmd, seederCmd, pluginCmd, buildCmd, i18nCmd, initCmd,
+	} {
 		rootCmd.AddCommand(cmd)
 	}
 }

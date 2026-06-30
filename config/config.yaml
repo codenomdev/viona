@@ -49,7 +49,7 @@ POSTGRES:
 
 # i18n language setup
 I18N:
-  BUNDLE_DIR: "/data/i18n"
+  BUNDLE_DIR: "/i18n"
 
 # UI setup
 UI:
