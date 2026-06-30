@@ -1,4 +1,7 @@
 language_options:
   - label: "English"
     value: "en_US"
-    progress: 100
+    progress: 10
+  - label: "Indonesia"
+    value: "id_ID"
+    progress: 10

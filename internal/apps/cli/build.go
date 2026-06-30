@@ -57,14 +57,14 @@ func newCodenomBuilder(buildDir, outputPath string, plugins []string, originalCo
 	if buildDir != "" {
 		material.tmpDir = filepath.Join(parentDir, buildDir)
 	} else {
-		material.tmpDir, _ = os.MkdirTemp(parentDir, "codenom_build")
+		material.tmpDir, _ = os.MkdirTemp(parentDir, "viona_build")
 	}
 	if len(outputPath) == 0 {
-		outputPath = filepath.Join(parentDir, "new_codenom")
+		outputPath = filepath.Join(parentDir, "new_viona")
 	}
 	material.outputPath, _ = filepath.Abs(outputPath)
 	material.plugins = formatPlugins(plugins)
-	material.moduleReplacement = os.Getenv("CODENOM_MODULE")
+	material.moduleReplacement = os.Getenv("VIONA_MODULE")
 	return &codenomBuilder{
 		buildingMaterial: material,
 	}
@@ -403,7 +403,7 @@ func resolveModuleReplacement(replacement, tmpDir string) (string, error) {
 	// Clone the repo to a local directory and return its path.
 	gitURL := "https://" + moduleName
 	tag := "v" + strings.TrimPrefix(version, "v")
-	localPath := filepath.Join(filepath.Dir(tmpDir), fmt.Sprintf("codenom_src%s", strings.ReplaceAll(version, ".", "_")))
+	localPath := filepath.Join(filepath.Dir(tmpDir), fmt.Sprintf("viona_src%s", strings.ReplaceAll(version, ".", "_")))
 
 	if _, statErr := os.Stat(localPath); statErr == nil {
 		fmt.Printf("[build] using cached local clone at %s\n", localPath)
@@ -416,7 +416,7 @@ func resolveModuleReplacement(replacement, tmpDir string) (string, error) {
 	cloneCmd.Stderr = os.Stderr
 	if err = cloneCmd.Run(); err != nil {
 		return "", fmt.Errorf(
-			"failed to clone %s@%s: %w\nTip: set CODENOM_MODULE to a local checkout path instead, e.g. CODENOM_MODULE=/path/to/codenom",
+			"failed to clone %s@%s: %w\nTip: set VIONA_MODULE to a local checkout path instead, e.g. VIONA_MODULE=/path/to/viona",
 			moduleName, version, err,
 		)
 	}
