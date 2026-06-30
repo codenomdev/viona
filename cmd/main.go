@@ -43,6 +43,10 @@ var (
 	Revision = ""
 	// Time is the build time of the project
 	Time = ""
+	// i18nSourcePath i18n from path
+	i18nSourcePath string
+	// i18nTargetPath i18n to path
+	i18nTargetPath string
 )
 
 func Main() {

@@ -121,6 +121,27 @@ var (
 			})
 		},
 	}
+
+	i18nCmd = &cobra.Command{
+		Use:   "i18n",
+		Short: "Overwrite i18n files",
+		Long:  `Merge i18n files from plugins to original i18n files. It will overwrite the original i18n files`,
+		Run: func(_ *cobra.Command, _ []string) {
+			if err := cli.ReplaceI18nFilesLocal(i18nTargetPath); err != nil {
+				fmt.Printf("replace i18n files failed %v\n", err)
+			} else {
+				fmt.Printf("replace i18n files successfully\n")
+			}
+
+			fmt.Printf("try to merge i18n files from %q to %q\n", i18nSourcePath, i18nTargetPath)
+
+			if err := cli.MergeI18nFilesLocal(i18nTargetPath, i18nSourcePath); err != nil {
+				fmt.Printf("merge i18n files failed %v\n", err)
+			} else {
+				fmt.Printf("merge i18n files successfully\n")
+			}
+		},
+	}
 )
 
 func init() {
@@ -141,6 +162,10 @@ func init() {
 	seederCmd.Flags().StringVarP(&TableName, "table", "t", "", "tablename for seeder, eg: 2024_11_28_000101_user_roles_seed. For list tablename seed, please run with flag --view-all or -v.")
 	seederCmd.Flags().BoolVarP(&ViewAll, "view-all", "v", false, "view all tablename availables. eg: 2024_11_28_000101_user_roles_seed.")
 
+	i18nCmd.Flags().StringVarP(&i18nSourcePath, "source", "s", "", "i18n source path, eg: -s ./i18n/source")
+
+	i18nCmd.Flags().StringVarP(&i18nTargetPath, "target", "t", "", "i18n target path, eg: -t ./i18n/target")
+
 	rootCmd.PersistentFlags().StringVarP(
 		&ConfigPath,
 		"config",
@@ -150,7 +175,7 @@ func init() {
 	)
 
 	// Register parent cmd
-	for _, cmd := range []*cobra.Command{serveCmd, migrateCmd, makeMigrationCmd, makeSeederCmd, seederCmd, pluginCmd, buildCmd} {
+	for _, cmd := range []*cobra.Command{serveCmd, migrateCmd, makeMigrationCmd, makeSeederCmd, seederCmd, pluginCmd, buildCmd, i18nCmd} {
 		rootCmd.AddCommand(cmd)
 	}
 }
