@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { HelmetBase, HelmetUpdate } from '@/common/interface';
 
-import siteInfoStore from './siteInfo';
+import generalInfoStore from './generalInfo';
 
 interface HelmetStore {
   items: HelmetBase;
@@ -10,9 +10,9 @@ interface HelmetStore {
 }
 
 const makePageTitle = (title = '', subtitle = '') => {
-  const { siteInfo } = siteInfoStore.getState();
+  const { siteInfo } = generalInfoStore.getState();
   if (!subtitle) {
-    subtitle = `${siteInfo.name}`;
+    subtitle = `${siteInfo.site_name}`;
   }
   let pageTitle = subtitle;
   if (title && title !== subtitle) {
@@ -34,7 +34,7 @@ const pageTags = create<HelmetStore>((set) => ({
     }
     o.description =
       params.description ||
-      siteInfoStore.getState().siteInfo?.description ||
+      generalInfoStore.getState().siteInfo?.description ||
       '';
     o.keywords = params.keywords || '';
 

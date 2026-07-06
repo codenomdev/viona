@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
 import {
-  interfaceStore,
+  generalInfoStore,
   loggedUserInfoStore,
   // themeSettingStore,
 } from '@/stores';
@@ -88,7 +88,7 @@ const addI18nResource = async (langName) => {
 
 export const getCurrentLang = () => {
   const loggedUser = loggedUserInfoStore.getState().user;
-  const adminInterface = interfaceStore.getState().interface;
+  const adminInterface = generalInfoStore.getState().siteInfo;
   const fallbackLang = Storage.get(CURRENT_LANG_STORAGE_KEY) || DEFAULT_LANG;
   let currentLang = loggedUser.language;
   // `default` mean use language value from admin interface
@@ -129,9 +129,9 @@ export const setupAppLanguage = async () => {
 };
 
 export const setupAppTimeZone = () => {
-  const adminInterface = interfaceStore.getState().interface;
-  if (adminInterface.time_zone) {
-    dayjs.tz.setDefault(adminInterface.time_zone);
+  const adminInterface = generalInfoStore.getState().siteInfo;
+  if (adminInterface.timezone) {
+    dayjs.tz.setDefault(adminInterface.timezone);
   }
 };
 

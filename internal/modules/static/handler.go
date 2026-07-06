@@ -1,19 +1,19 @@
 package static
 
 import (
+	"io/fs"
 	"net/http"
 	"strings"
 
 	"github.com/codenomdev/viona/pkg/response"
-	"github.com/codenomdev/viona/ui"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type (
 	Handler interface {
-		GetFaviconIco() echo.HandlerFunc
+		GetFaviconIco(buildFS fs.FS) echo.HandlerFunc
 		GetManifestJson() echo.HandlerFunc
-		SPAHandler() echo.HandlerFunc
+		SPAHandler(buildFS fs.FS) echo.HandlerFunc
 	}
 	handler struct{}
 )
@@ -22,28 +22,17 @@ func NewStaticHandler() Handler {
 	return &handler{}
 }
 
-func (h *handler) GetFaviconIco() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		file, err := ui.Build.ReadFile(
-			UIRootFilePath + "/favicon.ico",
-		)
-
-		if err != nil {
-			return echo.NewHTTPError(
-				http.StatusNotFound,
-			)
-		}
-
-		return c.Blob(
-			http.StatusOK,
-			"image/vnd.microsoft.icon",
-			file,
+func (h *handler) GetFaviconIco(buildFS fs.FS) echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		return c.FileFS(
+			"favicon.ico",
+			buildFS,
 		)
 	}
 }
 
-func (h *handler) SPAHandler() echo.HandlerFunc {
-	return func(c echo.Context) error {
+func (h *handler) SPAHandler(buildFS fs.FS) echo.HandlerFunc {
+	return func(c *echo.Context) error {
 		path := c.Request().URL.Path
 
 		if strings.HasPrefix(path, "/api/") {
@@ -62,33 +51,17 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 			)
 		}
 
-		file, err := ui.Build.ReadFile(
-			UIIndexFilePath,
-		)
+		cleanPath := strings.TrimPrefix(path, "/")
 
-		if err != nil {
-			return echo.NewHTTPError(
-				http.StatusNotFound,
-			)
+		if cleanPath != "" {
+			if _, err := fs.Stat(buildFS, cleanPath); err == nil {
+				return c.FileFS(cleanPath, buildFS)
+			}
 		}
 
-		content := string(file)
-
-		// optional CDN replacement
-		cdnPrefix := ""
-
-		if cdnPrefix != "" {
-
-			cdnPrefix = strings.TrimSuffix(
-				cdnPrefix,
-				"/",
-			)
-
-			content = strings.ReplaceAll(
-				content,
-				"/static",
-				cdnPrefix+"/static",
-			)
+		file, err := fs.ReadFile(buildFS, "index.html")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusNotFound, "not found")
 		}
 
 		c.Response().Header().Set(
@@ -103,13 +76,13 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 
 		return c.HTML(
 			http.StatusOK,
-			content,
+			string(file),
 		)
 	}
 }
 
 func (h *handler) GetManifestJson() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		resp := GetManifestJsonResp{
 			ManifestVersion: 3,
 			Version:         "1",

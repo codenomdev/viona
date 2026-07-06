@@ -7,5 +7,6 @@ export const RouteAlias = {
   signUp: '/auth/register',
   activationFailed: '/failed-activation',
   inactive: '/user/inactive',
-  suspended: 'user/suspend',
+  accountRecovery: '/auth/account-recovery',
+  suspended: '/user/suspend',
 };

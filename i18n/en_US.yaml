@@ -10,3 +10,61 @@ backend:
       other: Reopen
 
 ui:
+  page:
+    account_recovery:
+      title: Recover your account
+      desc: Enter your email address and we will send you a link to reset your password.
+    sign_in:
+      title: Sign in to your account
+      desc: Enter your email address and password to sign in.
+    sign_up:
+      title: Create a new account
+      desc: Enter your email address and password to create a new account.
+    have_account:
+      title: Already have an account?
+    not_have_account:
+      title: Don't have an account?
+    or_create_account:
+      title: or create an account with
+    back_to_sign_in:
+      title: Back to sign in
+  page_title:
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
+    http_403: HTTP Error 403
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don't have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
+  form:
+    submit: Submit
+    cancel: Cancel
+    reset: Reset
+    save: Save
+    save_and_continue: Save and continue
+    send_recovery_email: Send me recovery email
+    sign_in: Sign in
+    sign_up: Create account
+    sign_out: Sign out
+    validation:
+      required: This field is required.
+      email: Please enter a valid email address.
+      min_length: At least {{ count }} characters.
+      max_length: At most {{ count }} characters.
+      has_uppercase: At least {{ count }} capital letter.
+      has_lowercase: At least {{ count }} small letter.
+      has_number: At least {{ count }} number.
+      has_special_character: At least {{ count }} special character.
+      password_mismatch: Passwords do not match.
+      password_not_strong_enough: Password is not strong enough. It must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+    label:
+      username: Username
+      email: Email
+      password: Password
+      password_confirmation: Password confirmation
+      remember_me: Remember me
+      new_password: New password
+      new_password_confirmation: New password confirmation
+      forgot_password: Forgot your password?

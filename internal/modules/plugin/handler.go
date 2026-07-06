@@ -3,7 +3,7 @@ package plugin
 import (
 	"github.com/codenomdev/viona/pkg/response"
 	"github.com/codenomdev/viona/plugins"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type Handler struct{}
@@ -13,7 +13,7 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) GetAllPluginStatus() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		resp := make([]*GetAllPluginStatusResp, 0)
 
 		_ = plugins.CallBase(func(base plugins.Base) error {

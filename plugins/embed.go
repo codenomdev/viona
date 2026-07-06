@@ -1,6 +1,6 @@
 package plugins
 
-import "github.com/labstack/echo/v4"
+import "github.com/labstack/echo/v5"
 
 type EmbedConfig struct {
 	Platform string `json:"platform"`

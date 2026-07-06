@@ -11,7 +11,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/gookit/goutil v0.7.6
-	github.com/labstack/echo/v4 v4.15.3
+	github.com/labstack/echo/v5 v5.2.1
 	github.com/labstack/gommon v0.5.0
 	github.com/qiangxue/go-env v1.0.1
 	github.com/segmentfault/pacman v1.0.5-0.20230822083413-c0075a2d401f
@@ -53,6 +53,7 @@ require (
 	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/text v0.38.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
+	golang.org/x/tools v0.47.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/mysql v1.5.6 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect

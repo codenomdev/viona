@@ -2,7 +2,7 @@ import { FC, useEffect, useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { REACT_BASE_PATH } from '@/router/alias';
-import { pageTagStore, siteInfoStore } from '@/stores';
+import { pageTagStore, generalInfoStore } from '@/stores';
 import { getCurrentLang } from '@/utils/localize';
 
 const doInsertCustomCSS = !document.querySelector('link[href*="custom.css"]');
@@ -12,9 +12,9 @@ const Index: FC = () => {
   const { pageTitle, keywords, description } = pageTagStore(
     (state) => state.items,
   );
-  const appVersion = siteInfoStore((_) => _.version);
-  const hashVersion = siteInfoStore((_) => _.revision);
-  const siteName = siteInfoStore((_) => _.siteInfo).name;
+  const appVersion = generalInfoStore((_) => _.version);
+  const hashVersion = generalInfoStore((_) => _.revision);
+  const siteName = generalInfoStore((_) => _.siteInfo).site_name;
   const setAppGenerator = () => {
     if (!appVersion) {
       return;

@@ -1,10 +1,11 @@
 import { RouteAlias } from '@/router/alias';
 import { getAppSettings } from '@/services';
 import {
-  interfaceStore,
+  generalInfoStore,
+  securityInfoStore,
   loginSettingStore,
-  siteInfoStore,
-  siteSecurityStore,
+  // siteInfoStore,
+  // siteSecurityStore,
 } from '@/stores';
 
 import { floppyNavigation } from './floppyNavigation';
@@ -23,7 +24,7 @@ export type TGuardResult = {
 export const IGNORE_PATH_LIST = [
   RouteAlias.login,
   RouteAlias.signUp,
-  // RouteAlias.accountRecovery,
+  RouteAlias.accountRecovery,
   // RouteAlias.changeEmail,
   // RouteAlias.passwordReset,
   // RouteAlias.accountActivation,
@@ -52,18 +53,18 @@ export const isIgnoredPath = (ignoredPath?: string | string[]) => {
 export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
-    siteInfoStore.getState().update(appSettings.general);
-    siteInfoStore
+    generalInfoStore.getState().update(appSettings.general);
+    generalInfoStore
       .getState()
       .updateVersion(appSettings.version, appSettings.revision);
-    // siteInfoStore.getState().updateUsers(appSettings.site_users);
-    interfaceStore.getState().update(appSettings.interface);
+    // generalInfoStore.getState().updateUsers(appSettings.site_users);
+    // securityInfoStore.getState().update(appSettings.security);
     // pageTagStore.getState().update({
     //   title: appSettings.general?.name,
     //   description: appSettings.general?.description,
     // });
     // brandingStore.getState().update(appSettings.branding);
-    loginSettingStore.getState().update(appSettings.login);
+    loginSettingStore.getState().update(appSettings.security);
     // customizeStore.getState().update(appSettings.custom_css_html);
     // themeSettingStore.getState().update(appSettings.theme);
     // seoSettingStore.getState().update(appSettings.site_seo);
@@ -75,7 +76,7 @@ export const initAppSettingsStore = async () => {
     // aiControlStore.getState().update({
     //   ai_enabled: appSettings.ai_enabled,
     // });
-    siteSecurityStore.getState().update(appSettings.site_security);
+    securityInfoStore.getState().update(appSettings.security);
   }
 };
 

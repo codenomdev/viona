@@ -2,6 +2,8 @@ import { memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import usePageTags from '@/hooks/usePageTags';
+
 // import { usePageTags } from '@/hooks';
 
 const Index = ({
@@ -25,21 +27,25 @@ const Index = ({
     };
   }, []);
 
-  // usePageTags({
-  //   title: t(`http_${httpCode}`, { keyPrefix: 'page_title' }),
-  // });
+  usePageTags({
+    title: t(`http_${httpCode}`, { keyPrefix: 'page_title' }),
+  });
 
   return (
-    <div className="d-flex flex-column flex-1 grow justify-content-center align-items-center">
+    <div className="flex flex-col flex-1 grow justify-center items-center">
       <div
-        className="mb-4 text-secondary"
+        className="mb-4 text-secondary text-4xl font-bold"
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
         (=‘x‘=)
       </div>
       {showErrorCode && (
-        <h4 className="text-center">{t('http_error', { code: httpCode })}</h4>
+        <h4 className="text-center text-2xl mb-3 font-semibold">
+          {t('http_error', { code: httpCode })}
+        </h4>
       )}
-      {title && <h4 className="text-center">{title}</h4>}
+      {title && (
+        <h4 className="text-center text-2xl mb-3 font-semibold">{title}</h4>
+      )}
       <div className="text-center mb-3 fs-5">
         {errMsg || t(`desc_${httpCode}`)}
       </div>

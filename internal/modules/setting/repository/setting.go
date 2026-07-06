@@ -16,9 +16,9 @@ type (
 	Repository interface {
 		Create(ctx context.Context, tx *gorm.DB, model *domain.SiteSetting) error
 		UpdateByKey(ctx context.Context, tx *gorm.DB, model domain.SiteSetting) error
-		GetAll(ctx context.Context, tx *gorm.DB) (*[]domain.SiteSetting, error)
+		GetAll(ctx context.Context, tx *gorm.DB) ([]domain.SiteSetting, error)
 		GetByKey(ctx context.Context, tx *gorm.DB, key string) (*domain.SiteSetting, error)
-		GetByGroup(ctx context.Context, tx *gorm.DB, group string) (*[]domain.SiteSetting, error)
+		GetByGroup(ctx context.Context, tx *gorm.DB, group string) ([]domain.SiteSetting, error)
 		GetWhere(tx *gorm.DB, query any, args ...any) gorm.ChainInterface[domain.SiteSetting]
 	}
 
@@ -60,15 +60,13 @@ func (r *repository) GetByKey(ctx context.Context, tx *gorm.DB, key string) (*do
 
 // Get by group settings
 // Only with status == 1
-func (r *repository) GetByGroup(ctx context.Context, tx *gorm.DB, group string) (*[]domain.SiteSetting, error) {
-	result, err := r.GetWhere(tx, "group_name = ?", group).Where("status = 1").Find(ctx)
-	return &result, err
+func (r *repository) GetByGroup(ctx context.Context, tx *gorm.DB, group string) ([]domain.SiteSetting, error) {
+	return r.GetWhere(tx, "group_name = ?", group).Where("status = 1").Find(ctx)
 }
 
 // Get all
-func (r *repository) GetAll(ctx context.Context, tx *gorm.DB) (*[]domain.SiteSetting, error) {
-	result, err := r.GetWhere(tx, "status = 1").Find(ctx)
-	return &result, err
+func (r *repository) GetAll(ctx context.Context, tx *gorm.DB) ([]domain.SiteSetting, error) {
+	return r.GetWhere(tx, "status = 1").Find(ctx)
 }
 
 // Get where

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/segmentfault/pacman/i18n"
 )
 
@@ -14,7 +14,7 @@ const AcceptLanguageContextKey contextKey = "accept-language"
 
 func I18nMiddleware(defaultLang i18n.Language) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
+		return func(c *echo.Context) error {
 			lang := c.QueryParam("lang")
 
 			if lang == "" {

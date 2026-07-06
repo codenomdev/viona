@@ -7,7 +7,7 @@ import (
 	"github.com/segmentfault/pacman/i18n"
 
 	"github.com/codenomdev/viona/pkg/translator"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/segmentfault/pacman/cache"
 	"gorm.io/gorm"
 )
@@ -35,6 +35,11 @@ func Register(p Base) {
 	if _, ok := p.(Connector); ok {
 		registerConnector(p.(Connector))
 	}
+
+	if _, ok := p.(CDN); ok {
+		registerCDN(p.(CDN))
+	}
+
 }
 
 type Stack[T Base] struct {
@@ -97,9 +102,9 @@ func (m *statusManager) Enable(name string, enabled bool) {
 	// 	m.status[slugName] = false
 	// }
 
-	// for _, slugName := range coordinatedCDNPlugins(name) {
-	// 	m.status[slugName] = false
-	// }
+	for _, slugName := range coordinatedCDNPlugins(name) {
+		m.status[slugName] = false
+	}
 }
 
 func (m *statusManager) IsEnabled(name string) bool {

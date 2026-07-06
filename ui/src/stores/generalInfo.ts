@@ -1,13 +1,17 @@
 import { create } from 'zustand';
 
-import { AdminSettingsGeneral } from '@/common/interface';
-import { DEFAULT_SITE_NAME } from '@/common/constants';
+import { SettingsGeneral } from '@/common/interface';
+import {
+  DEFAULT_LANG,
+  DEFAULT_SITE_NAME,
+  DEFAULT_TIMEZONE,
+} from '@/common/constants';
 
 interface SiteInfoType {
-  siteInfo: AdminSettingsGeneral;
+  siteInfo: SettingsGeneral;
   version: string;
   revision: string;
-  update: (params: AdminSettingsGeneral) => void;
+  update: (params: SettingsGeneral) => void;
   updateVersion: (ver: string, revision: string) => void;
   users: any;
   updateUsers: (users: SiteInfoType['users']) => void;
@@ -24,14 +28,17 @@ const defaultUsersConf: any = {
   gravatar_base_url: '',
 };
 
-const siteInfo = create<SiteInfoType>((set) => ({
+const generalInfo = create<SiteInfoType>((set) => ({
   siteInfo: {
-    name: DEFAULT_SITE_NAME,
+    language: DEFAULT_LANG,
+    timezone: DEFAULT_TIMEZONE,
+    site_name: DEFAULT_SITE_NAME,
     description: '',
-    short_description: '',
-    site_url: '',
-    contact_email: '',
-    permalink: 1,
+    // name: DEFAULT_SITE_NAME,
+    // short_description: '',
+    // site_url: '',
+    // contact_email: '',
+    // permalink: 1,
   },
   users: defaultUsersConf,
   version: '',
@@ -39,8 +46,8 @@ const siteInfo = create<SiteInfoType>((set) => ({
   update: (params) =>
     set((_) => {
       const o = { ..._.siteInfo, ...params };
-      if (!o.name) {
-        o.name = DEFAULT_SITE_NAME;
+      if (!o.site_name) {
+        o.site_name = DEFAULT_SITE_NAME;
       }
       return {
         siteInfo: o,
@@ -59,4 +66,4 @@ const siteInfo = create<SiteInfoType>((set) => ({
   },
 }));
 
-export default siteInfo;
+export default generalInfo;

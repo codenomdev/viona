@@ -1,16 +1,27 @@
 import React, { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import usePageTags from '@/hooks/usePageTags';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { FormDataType, LoginReqParams } from '@/common/interface';
 import { handleFormError, scrollToElementTop } from '@/utils';
 import { login } from '@/services';
+import { loginSettingStore } from '@/stores';
 
 const Index: React.FC = () => {
+  const { t } = useTranslation('translation');
+  const loginSetting = loginSettingStore((state) => state.login);
   const [formData, setFormData] = useState<FormDataType>({
     email: {
       value: '',
@@ -34,7 +45,7 @@ const Index: React.FC = () => {
       formData.email = {
         value: '',
         isInvalid: true,
-        errorMsg: 'required',
+        errorMsg: t('form.validation.required'),
       };
     }
 
@@ -43,7 +54,7 @@ const Index: React.FC = () => {
       formData.pass = {
         value: '',
         isInvalid: true,
-        errorMsg: 'required',
+        errorMsg: t('form.validation.required'),
       };
     }
 
@@ -109,19 +120,20 @@ const Index: React.FC = () => {
   };
 
   usePageTags({
-    title: 'Login Users',
+    title: t('page.sign_in.title'),
   });
   return (
     <Card className="w-full md:w-[460px] md:rounded md:border md:bg-background-card md:shadow-sm">
       <CardHeader>
-        <CardTitle>Sign in</CardTitle>
+        <CardTitle className="mb-1">{t('page.sign_in.title')}</CardTitle>
+        <CardDescription>{t('page.sign_in.desc')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form noValidate onSubmit={handleSubmit}>
           <div className="flex flex-col gap-6">
             <div className="grid">
               <Field className="mb-5">
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">{t('form.label.email')}</FieldLabel>
                 <Input
                   id="email"
                   className="h-11"
@@ -142,7 +154,9 @@ const Index: React.FC = () => {
                 <FieldError>{formData.email.errorMsg}</FieldError>
               </Field>
               <Field className="mb-3">
-                <FieldLabel htmlFor="pass">Password</FieldLabel>
+                <FieldLabel htmlFor="pass">
+                  {t('form.label.password')}
+                </FieldLabel>
                 <Input
                   type="password"
                   id="pass"
@@ -163,20 +177,34 @@ const Index: React.FC = () => {
                 />
                 <FieldError>{formData.pass.errorMsg}</FieldError>
               </Field>
-              <div className="mb-4 grid justify-items-end text-right">
-                <Link
-                  to="auth/account-recovery"
-                  className="text-primary text-sm font-semibold hover:text-primary/80">
-                  Forgot password?
-                </Link>
-              </div>
+              {loginSetting.allow_user_recover && (
+                <div className="mb-4 grid justify-items-end text-right">
+                  <Link
+                    to="/auth/account-recovery"
+                    className="text-primary text-sm font-semibold hover:text-primary/80">
+                    {t('form.label.forgot_password')}
+                  </Link>
+                </div>
+              )}
               <Button type="submit" size="lg">
-                Sign in
+                {t('form.sign_in')}
               </Button>
             </div>
           </div>
         </form>
       </CardContent>
+      <CardFooter>
+        <div className="text-center w-full">
+          <span className="text-foreground text-sm">
+            {t('page.not_have_account.title')}
+          </span>
+          <Link
+            to="/auth/register"
+            className="ml-1 text-primary text-sm font-semibold hover:text-primary/80">
+            {t('form.sign_up')}
+          </Link>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
