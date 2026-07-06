@@ -1,71 +1,92 @@
 package middleware
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/codenomdev/viona/pkg/log"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"go.uber.org/zap"
 )
 
 func RequestLoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		start := time.Now()
 
 		req := c.Request()
-		res := c.Response()
+
+		// wrap manual
+		rw := &responseWriter{ResponseWriter: c.Response()}
+
+		// replace response writer
+		c.SetResponse(rw)
 
 		logger := log.FromContext(req.Context())
 
-		// inject logger ke context (biar downstream bisa pakai)
 		ctx := log.ToContext(req.Context(), logger)
 		c.SetRequest(req.WithContext(ctx))
 
 		err := next(c)
 
-		stop := time.Now()
-		latency := stop.Sub(start)
+		latency := time.Since(start)
+
+		request := c.Request()
+
+		ip := request.Header.Get("CF-Connecting-IP")
+		if ip == "" {
+			ip = request.Header.Get("X-Real-IP")
+		}
+		if ip == "" {
+			ip = request.Header.Get("X-Forwarded-For")
+		}
+		if ip == "" {
+			ip = c.RealIP()
+		}
 
 		fields := []zap.Field{
-			zap.String("request_id", res.Header().Get(echo.HeaderXRequestID)),
+			zap.String("request_id", rw.Header().Get(echo.HeaderXRequestID)),
 			zap.String("method", req.Method),
-			zap.String("path", req.URL.Path),
-			zap.Int("status", res.Status),
+			zap.String("path", c.Path()),
+			zap.Int("status", rw.Status()),
+			zap.Int("size", rw.Size()),
 			zap.Duration("latency", latency),
-			zap.Int64("size", res.Size),
-			zap.String("client_ip", c.RealIP()),
+			zap.String("client_ip", ip),
 		}
 
 		if err != nil {
-			if he, ok := err.(*echo.HTTPError); ok {
-
-				fields = append(fields,
-					zap.String("error", he.Error()),
-				)
-
-				switch {
-				case he.Code >= 500:
-					logger.Error("http_request", fields...)
-
-				case he.Code >= 400:
-					logger.Warn("http_request", fields...)
-
-				default:
-					logger.Info("http_request", fields...)
-				}
-
-				return err
-			}
-
-			fields = append(fields,
-				zap.String("error", err.Error()),
-			)
-
-			logger.Error("http_request", fields...)
+			logger.Error("http_request", append(fields, zap.String("error", err.Error()))...)
 			return err
 		}
 
 		logger.Info("http_request", fields...)
 		return nil
 	}
+}
+
+type responseWriter struct {
+	http.ResponseWriter
+	status int
+	size   int
+}
+
+func (w *responseWriter) WriteHeader(code int) {
+	w.status = code
+	w.ResponseWriter.WriteHeader(code)
+}
+
+func (w *responseWriter) Write(b []byte) (int, error) {
+	if w.status == 0 {
+		w.status = http.StatusOK
+	}
+	n, err := w.ResponseWriter.Write(b)
+	w.size += n
+	return n, err
+}
+
+func (w *responseWriter) Status() int {
+	return w.status
+}
+
+func (w *responseWriter) Size() int {
+	return w.size
 }

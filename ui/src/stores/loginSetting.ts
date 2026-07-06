@@ -1,18 +1,19 @@
 import { create } from 'zustand';
 
-import { AdminSettingsLogin } from '@/common/interface';
+import { SettingsSecurity } from '@/common/interface';
 
 interface IType {
-  login: AdminSettingsLogin;
-  update: (params: AdminSettingsLogin) => void;
+  login: SettingsSecurity;
+  update: (params: SettingsSecurity) => void;
 }
 
 const loginSetting = create<IType>((set) => ({
   login: {
     allow_new_registrations: true,
     allow_email_registrations: true,
-    allow_email_domains: [],
+    // allow_email_domains: [],
     allow_password_login: true,
+    allow_user_recover: true,
   },
   update: (params) =>
     set(() => {

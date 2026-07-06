@@ -1,22 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import type { IndexRouteObject, NonIndexRouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
@@ -40,45 +21,45 @@ export type RouteNode = UnionRouteNode & {
 };
 
 const routes: RouteNode[] = [
-  {
-    path: '/',
-    page: 'pages/Layout',
-    loader: async () => {
-      await guard.setupApp();
-      return null;
-    },
-    guard: () => {
-      // const gr = guard.shouldLoginRequired();
-      // if (!gr.ok) {
-      //   return gr;
-      // }
-      return {
-        ok: true,
-      };
-    },
-    children: [
-      // {
-      //   path: 'auth/login',
-      //   page: 'pages/Auth/Login',
-      //   guard: () => {
-      //     const notLogged = guard.notLogged();
-      //     if (notLogged.ok) {
-      //       return notLogged;
-      //     }
+  // {
+  //   path: '/',
+  //   page: 'pages/Layout',
+  //   loader: async () => {
+  //     await guard.setupApp();
+  //     return null;
+  //   },
+  //   guard: () => {
+  //     // const gr = guard.shouldLoginRequired();
+  //     // if (!gr.ok) {
+  //     //   return gr;
+  //     // }
+  //     return {
+  //       ok: true,
+  //     };
+  //   },
+  //   children: [
+  //     // {
+  //     //   path: 'auth/login',
+  //     //   page: 'pages/Auth/Login',
+  //     //   guard: () => {
+  //     //     const notLogged = guard.notLogged();
+  //     //     if (notLogged.ok) {
+  //     //       return notLogged;
+  //     //     }
 
-      //     return guard.notActivated();
-      //   },
-      // },
-      {
-        path: '*',
-        page: 'pages/404',
-      },
-      {
-        path: '50x',
-        page: 'pages/50X',
-      },
-    ],
-  },
+  //     //     return guard.notActivated();
+  //     //   },
+  //     // },
+  //     {
+  //       path: '*',
+  //       page: 'pages/404',
+  //     },
+  //     {
+  //       path: '50x',
+  //       page: 'pages/50X',
+  //     },
+  //   ],
+  // },
   {
     path: '/',
     page: 'pages/Layout/AuthLayout',
@@ -101,12 +82,26 @@ const routes: RouteNode[] = [
         path: 'auth/login',
         page: 'pages/Auth/Login',
         guard: () => {
-          const notLogged = guard.notLogged();
-          if (notLogged.ok) {
-            return notLogged;
-          }
+          return guard.notLogged();
+          // if (notLogged.ok) {
+          //   return notLogged;
+          // }
 
-          return guard.notActivated();
+          // return guard.notActivated();
+        },
+      },
+      {
+        path: 'auth/account-recovery',
+        page: 'pages/Auth/RecoveryAccount',
+        guard: () => {
+          return guard.notLogged();
+        },
+      },
+      {
+        path: 'auth/register',
+        page: 'pages/Auth/Register',
+        guard: () => {
+          return guard.notLogged();
         },
       },
     ],

@@ -6,7 +6,7 @@ import (
 
 	"github.com/codenomdev/viona/pkg/response"
 	"github.com/codenomdev/viona/ui"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type (
@@ -23,7 +23,7 @@ func NewStaticHandler() Handler {
 }
 
 func (h *handler) GetFaviconIco() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		file, err := ui.Build.ReadFile(
 			UIRootFilePath + "/favicon.ico",
 		)
@@ -31,6 +31,7 @@ func (h *handler) GetFaviconIco() echo.HandlerFunc {
 		if err != nil {
 			return echo.NewHTTPError(
 				http.StatusNotFound,
+				"not found",
 			)
 		}
 
@@ -43,7 +44,7 @@ func (h *handler) GetFaviconIco() echo.HandlerFunc {
 }
 
 func (h *handler) SPAHandler() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		path := c.Request().URL.Path
 
 		if strings.HasPrefix(path, "/api/") {
@@ -69,6 +70,7 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 		if err != nil {
 			return echo.NewHTTPError(
 				http.StatusNotFound,
+				"not found",
 			)
 		}
 
@@ -109,7 +111,7 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 }
 
 func (h *handler) GetManifestJson() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		resp := GetManifestJsonResp{
 			ManifestVersion: 3,
 			Version:         "1",

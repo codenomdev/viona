@@ -3,7 +3,7 @@ package setting
 import (
 	"github.com/codenomdev/viona/internal/modules/setting/service"
 	"github.com/codenomdev/viona/pkg/response"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type (
@@ -21,7 +21,7 @@ func NewHandler(
 }
 
 func (h *handler) GetSettingAll() echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		rest, err := h.settingService.GetSettingsPerGroup(c.Request().Context())
 
 		if err != nil {

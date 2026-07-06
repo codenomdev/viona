@@ -4,11 +4,12 @@ import './i18n/init';
 
 import '@/utils/pluginKit';
 import { useMergeRoutes } from '@/router';
+import LoadingPage from '@/components/LoadingPage';
 
 function App() {
   const routes = useMergeRoutes();
   if (routes.length === 0) {
-    return <div>Loading routes...</div>;
+    return <LoadingPage />;
   }
   // console.log(routes);
   const router = createBrowserRouter(routes, {

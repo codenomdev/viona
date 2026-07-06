@@ -1,6 +1,6 @@
 package static
 
-import "github.com/labstack/echo/v4"
+import "github.com/labstack/echo/v5"
 
 type Routes struct {
 	h Handler

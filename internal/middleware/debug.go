@@ -7,12 +7,12 @@ import (
 
 	"github.com/codenomdev/viona/pkg/config"
 	"github.com/codenomdev/viona/pkg/log"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 // Debug dump request middleware
 func DebugMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(c echo.Context) error {
+	return func(c *echo.Context) error {
 		cfg := config.FromContext(c.Request().Context())
 		logger := log.FromContext(c.Request().Context())
 		if cfg.HOST.SERVER_DEBUG {

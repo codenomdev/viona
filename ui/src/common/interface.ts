@@ -45,46 +45,49 @@ export interface UserPluginsConfigRes {
   slug_name: string;
 }
 
-export interface AdminSettingsInterface {
-  language: string;
-  time_zone?: string;
-}
-
 export interface LangsType {
   label: string;
   value: string;
 }
 
-export interface AdminSettingsSecurity {
-  external_content_display: string;
-  check_update: boolean;
-  login_required: boolean;
-}
+// /**
+//  * @description interface for Admin Settings
+//  */
+// export interface AdminSettingsGeneral {
+//   name: string;
+//   short_description: string;
+//   description: string;
+//   site_url: string;
+//   contact_email: string;
+//   permalink?: number;
+// }
 
-/**
- * @description interface for Admin Settings
- */
-export interface AdminSettingsGeneral {
-  name: string;
-  short_description: string;
+// export interface AdminSettingsLogin {
+//   allow_new_registrations: boolean;
+//   allow_email_registrations: boolean;
+//   allow_email_domains: string[];
+//   allow_password_login: boolean;
+// }
+
+export interface SettingsGeneral {
+  site_name: string;
+  language: string;
+  timezone: string;
   description: string;
-  site_url: string;
-  contact_email: string;
-  permalink?: number;
 }
 
-export interface AdminSettingsLogin {
-  allow_new_registrations: boolean;
+export interface SettingsSecurity {
   allow_email_registrations: boolean;
-  allow_email_domains: string[];
+  allow_new_registrations: boolean;
   allow_password_login: boolean;
+  allow_user_recover: boolean;
 }
 
 export interface SiteSettings {
   // branding: AdminSettingBranding;
-  general: AdminSettingsGeneral;
-  interface: AdminSettingsInterface;
-  login: AdminSettingsLogin;
+  general: SettingsGeneral;
+  security: SettingsSecurity;
+  // login: AdminSettingsLogin;
   // custom_css_html: AdminSettingsCustom;
   // theme: AdminSettingsTheme;
   // site_seo: AdminSettingsSeo;
@@ -94,7 +97,7 @@ export interface SiteSettings {
   // site_tags: AdminTagsSetting;
   version: string;
   revision: string;
-  site_security: AdminSettingsSecurity;
+  // site_security: AdminSettingsSecurity;
   ai_enabled: boolean;
 }
 
@@ -117,4 +120,13 @@ export interface FieldError {
 export interface LoginReqParams {
   email: string;
   password: string;
+}
+
+export interface RegisterReqParams {
+  email: string;
+  password: string;
+}
+
+export interface RecoveryAccountReqParams {
+  email: string;
 }

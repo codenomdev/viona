@@ -6,7 +6,7 @@ import (
 	"github.com/codenomdev/viona/internal/modules/static"
 	"github.com/codenomdev/viona/pkg/config"
 	"github.com/codenomdev/viona/ui"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type (
