@@ -1,6 +1,10 @@
 package static
 
-import "github.com/labstack/echo/v5"
+import (
+	"io/fs"
+
+	"github.com/labstack/echo/v5"
+)
 
 type Routes struct {
 	h Handler
@@ -14,8 +18,8 @@ func NewStaticRoute(
 	}
 }
 
-func (r *Routes) RegisterStatic(e *echo.Echo) {
-	e.GET("/favicon.ico", r.h.GetFaviconIco())
+func (r *Routes) RegisterStatic(e *echo.Echo, buildFS fs.FS) {
+	e.GET("/favicon.ico", r.h.GetFaviconIco(buildFS))
 	e.GET("/manifest.json", r.h.GetManifestJson())
-	e.GET("/*", r.h.SPAHandler())
+	e.GET("/*", r.h.SPAHandler(buildFS))
 }

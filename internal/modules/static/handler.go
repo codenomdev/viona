@@ -1,19 +1,20 @@
 package static
 
 import (
+	"fmt"
+	"io/fs"
 	"net/http"
 	"strings"
 
 	"github.com/codenomdev/viona/pkg/response"
-	"github.com/codenomdev/viona/ui"
 	"github.com/labstack/echo/v5"
 )
 
 type (
 	Handler interface {
-		GetFaviconIco() echo.HandlerFunc
+		GetFaviconIco(buildFS fs.FS) echo.HandlerFunc
 		GetManifestJson() echo.HandlerFunc
-		SPAHandler() echo.HandlerFunc
+		SPAHandler(buildFS fs.FS) echo.HandlerFunc
 	}
 	handler struct{}
 )
@@ -22,28 +23,32 @@ func NewStaticHandler() Handler {
 	return &handler{}
 }
 
-func (h *handler) GetFaviconIco() echo.HandlerFunc {
+func (h *handler) GetFaviconIco(buildFS fs.FS) echo.HandlerFunc {
 	return func(c *echo.Context) error {
-		file, err := ui.Build.ReadFile(
-			UIRootFilePath + "/favicon.ico",
-		)
+		// file, err := ui.Build.ReadFile(
+		// 	UIRootFilePath + "/favicon.ico",
+		// )
 
-		if err != nil {
-			return echo.NewHTTPError(
-				http.StatusNotFound,
-				"not found",
-			)
-		}
+		// if err != nil {
+		// 	return echo.NewHTTPError(
+		// 		http.StatusNotFound,
+		// 		"not found",
+		// 	)
+		// }
 
-		return c.Blob(
-			http.StatusOK,
-			"image/vnd.microsoft.icon",
-			file,
+		// return c.Blob(
+		// 	http.StatusOK,
+		// 	"image/vnd.microsoft.icon",
+		// 	file,
+		// )
+		return c.FileFS(
+			"favicon.ico",
+			buildFS,
 		)
 	}
 }
 
-func (h *handler) SPAHandler() echo.HandlerFunc {
+func (h *handler) SPAHandler(buildFS fs.FS) echo.HandlerFunc {
 	return func(c *echo.Context) error {
 		path := c.Request().URL.Path
 
@@ -63,34 +68,23 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 			)
 		}
 
-		file, err := ui.Build.ReadFile(
-			UIIndexFilePath,
-		)
+		cleanPath := strings.TrimPrefix(path, "/")
 
-		if err != nil {
-			return echo.NewHTTPError(
-				http.StatusNotFound,
-				"not found",
-			)
+		if cleanPath != "" {
+			if _, err := fs.Stat(buildFS, cleanPath); err == nil {
+				return c.FileFS(cleanPath, buildFS)
+			}
 		}
 
-		content := string(file)
+		fs.WalkDir(buildFS, ".", func(path string, d fs.DirEntry, err error) error {
+			fmt.Println("FS:", path)
+			return nil
+		})
 
-		// optional CDN replacement
-		cdnPrefix := ""
-
-		if cdnPrefix != "" {
-
-			cdnPrefix = strings.TrimSuffix(
-				cdnPrefix,
-				"/",
-			)
-
-			content = strings.ReplaceAll(
-				content,
-				"/static",
-				cdnPrefix+"/static",
-			)
+		// fallback ke index.html
+		file, err := fs.ReadFile(buildFS, "index.html")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusNotFound, "not found")
 		}
 
 		c.Response().Header().Set(
@@ -105,7 +99,7 @@ func (h *handler) SPAHandler() echo.HandlerFunc {
 
 		return c.HTML(
 			http.StatusOK,
-			content,
+			string(file),
 		)
 	}
 }
