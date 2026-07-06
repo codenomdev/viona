@@ -1,7 +1,6 @@
 package static
 
 import (
-	"fmt"
 	"io/fs"
 	"net/http"
 	"strings"
@@ -25,22 +24,6 @@ func NewStaticHandler() Handler {
 
 func (h *handler) GetFaviconIco(buildFS fs.FS) echo.HandlerFunc {
 	return func(c *echo.Context) error {
-		// file, err := ui.Build.ReadFile(
-		// 	UIRootFilePath + "/favicon.ico",
-		// )
-
-		// if err != nil {
-		// 	return echo.NewHTTPError(
-		// 		http.StatusNotFound,
-		// 		"not found",
-		// 	)
-		// }
-
-		// return c.Blob(
-		// 	http.StatusOK,
-		// 	"image/vnd.microsoft.icon",
-		// 	file,
-		// )
 		return c.FileFS(
 			"favicon.ico",
 			buildFS,
@@ -75,11 +58,6 @@ func (h *handler) SPAHandler(buildFS fs.FS) echo.HandlerFunc {
 				return c.FileFS(cleanPath, buildFS)
 			}
 		}
-
-		fs.WalkDir(buildFS, ".", func(path string, d fs.DirEntry, err error) error {
-			fmt.Println("FS:", path)
-			return nil
-		})
 
 		// fallback ke index.html
 		file, err := fs.ReadFile(buildFS, "index.html")
