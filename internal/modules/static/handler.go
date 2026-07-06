@@ -59,7 +59,6 @@ func (h *handler) SPAHandler(buildFS fs.FS) echo.HandlerFunc {
 			}
 		}
 
-		// fallback ke index.html
 		file, err := fs.ReadFile(buildFS, "index.html")
 		if err != nil {
 			return echo.NewHTTPError(http.StatusNotFound, "not found")
