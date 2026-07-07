@@ -1,0 +1,25 @@
+github:
+  description: "The viona boilerplate project"
+  homepage: https://codenom.com
+  labels:
+    - viona
+    - go
+    - golang
+    - typescript
+  features:
+    wiki: true
+    issues: true
+    projects: true
+    discussions: false
+  enabled_merge_buttons:
+    squash: true
+    rebase: true
+    merge: false
+  protected_branches:
+    main: {}
+
+notifications:
+  commits:      codenomdev@gmail.com
+  issues:       codenomdev@gmail.com
+  pullrequests: codenomdev@gmail.com
+  discussions:  codenomdev@gmail.com

@@ -1,0 +1,32 @@
+version: "2"
+linters:
+  exclusions:
+    paths:
+      - answer-data
+      - ui
+      - i18n
+  enable:
+    - asasalint # checks for pass []any as any in variadic func(...any)
+    - asciicheck # checks that your code does not contain non-ASCII identifiers
+    - bidichk # checks for dangerous unicode character sequences
+    - bodyclose # checks whether HTTP response body is closed successfully
+    - canonicalheader # checks whether net/http.Header uses canonical header
+    - copyloopvar # detects places where loop variables are copied (Go 1.22+)
+    - gocritic # provides diagnostics that check for bugs, performance and style issues
+    - misspell # finds commonly misspelled English words in comments and strings
+    - modernize # detects code that can be modernized to use newer Go features
+    - testifylint # checks usage of github.com/stretchr/testify
+    - unconvert # removes unnecessary type conversions
+    - unparam # reports unused function parameters
+    - whitespace # detects leading and trailing whitespace
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+      rewrite-rules:
+        - pattern: 'interface{}'
+          replacement: 'any'
