@@ -1,0 +1,68 @@
+version: 2
+
+env:
+  - GO11MODULE=on
+  - GO111MODULE=on
+  - GOPROXY=https://goproxy.io,direct
+  - CGO_ENABLED=0
+
+before:
+  hooks:
+    - go mod tidy
+
+release:
+  draft: true
+
+builds:
+  - id: build
+    main: ./cmd/codenom/.
+    binary: codenom
+    ldflags: -s -w -X github.com/codenomdev/viona/cmd.Version={{.RawVersion}} -X github.com/codenomdev/viona/cmd.Revision={{.ShortCommit}} -X github.com/codenomdev/viona/cmd.Time={{.Date}} -X github.com/codenomdev/viona/cmd.BuildUser=goreleaser
+    flags: -v
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+  - id: build-windows
+    main: ./cmd/codenom/.
+    binary: codenom
+    ldflags: -s -w -X github.com/codenomdev/viona/cmd.Version={{.RawVersion}} -X github.com/codenomdev/viona/cmd.Revision={{.ShortCommit}} -X github.com/codenomdev/viona/cmd.Time={{.Date}} -X github.com/codenomdev/viona/cmd.BuildUser=goreleaser
+    flags: -v
+    goos:
+      - windows
+    goarch:
+      - amd64
+
+
+
+
+archives:
+  - name_template: >-
+      codenom-viona-{{ .RawVersion }}-bin-{{ .Os }}-{{ .Arch }}
+    files:
+      - src: "docs/release/LICENSE"
+        dst: LICENSE
+      - src: "docs/release/NOTICE"
+        dst: NOTICE
+      - src: "docs/release/licenses/*"
+        dst: licenses/
+    wrap_in_directory: true
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  version_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+source:
+  enabled: true
+  name_template: codenom-viona-{{ .RawVersion }}-src
+  prefix_template: "codenom-viona-{{ .RawVersion }}-src/"
+
+# goreleaser release --skip-validate  --skip-publish --clean

@@ -2,7 +2,7 @@ version: "2"
 linters:
   exclusions:
     paths:
-      - answer-data
+      - viona-data
       - ui
       - i18n
   enable:
