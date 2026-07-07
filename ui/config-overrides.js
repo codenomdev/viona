@@ -125,10 +125,10 @@ module.exports = {
           changeOrigin: true,
           secure: false,
         },
-        {
-          context: ['/custom.css'],
-          target: process.env.REACT_APP_API_URL,
-        }
+        // {
+        //   context: ['/custom.css'],
+        //   target: process.env.REACT_APP_API_URL,
+        // }
       ];
       return config;
     };
