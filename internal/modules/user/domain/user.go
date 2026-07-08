@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"time"
 
+	"github.com/codenomdev/viona/internal/modules/user_verify/domain"
 	"github.com/codenomdev/viona/pkg/util"
 	"github.com/gookit/goutil/strutil"
 	"gorm.io/gorm"
@@ -45,6 +46,8 @@ type User struct {
 	DeletedAt     gorm.DeletedAt
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
+
+	EmailVerification domain.EmailVerification `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 func (User) TableName() string {
