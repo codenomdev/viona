@@ -8,6 +8,8 @@ backend:
       other: Close
     reopen:
       other: Reopen
+  validation:
+    email_already_exists: This email is already registered.
 
 ui:
   page:
@@ -50,7 +52,11 @@ ui:
     sign_out: Sign out
     validation:
       required: This field is required.
+      character: 'Must use the character set "a-z", "0-9", " - . _"'
+      fullname_range: Fullname must be between {{ min }} and {{ max }} characters.
+      email_range: Email must be between {{ min }} and {{ max }} characters.
       email: Please enter a valid email address.
+      email_already_exists: This email is already registered.
       min_length: At least {{ count }} characters.
       max_length: At most {{ count }} characters.
       has_uppercase: At least {{ count }} capital letter.
@@ -60,6 +66,7 @@ ui:
       password_mismatch: Passwords do not match.
       password_not_strong_enough: Password is not strong enough. It must contain at least one uppercase letter, one lowercase letter, one number, and one special character.
     label:
+      fullname: Fullname
       username: Username
       email: Email
       password: Password
