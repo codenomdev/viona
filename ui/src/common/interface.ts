@@ -8,6 +8,13 @@ export interface ApiResponse<T = any> {
   meta: ApiMeta;
   error: boolean;
   data: T;
+  payload?: ValidationError[];
+  errors?: FieldError[] | string[];
+}
+
+export interface ValidationError {
+  error_field: string;
+  error_msg: string;
 }
 
 export interface HelmetBase {
@@ -123,6 +130,7 @@ export interface LoginReqParams {
 }
 
 export interface RegisterReqParams {
+  fullname: string;
   email: string;
   password: string;
 }
