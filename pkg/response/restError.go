@@ -23,19 +23,19 @@ type RestError interface {
 	ResponseCode() int
 	ResponseErrors() []string
 	ResponseMessage() string
-	ResponsePayload() interface{}
+	ResponsePayload() any
 }
 
-func (e ErrorResponse) ResponseCode() int            { return e.Meta.StatusCode }
-func (e ErrorResponse) ResponseErrors() []string     { return e.Errors }
-func (e ErrorResponse) ResponseMessage() string      { return e.Meta.Message }
-func (e ErrorResponse) ResponsePayload() interface{} { return e.Payload }
-func (e ErrorResponse) ResponseMeta() MetaResponse   { return e.Meta }
+func (e ErrorResponse) ResponseCode() int          { return e.Meta.StatusCode }
+func (e ErrorResponse) ResponseErrors() []string   { return e.Errors }
+func (e ErrorResponse) ResponseMessage() string    { return e.Meta.Message }
+func (e ErrorResponse) ResponsePayload() any       { return e.Payload }
+func (e ErrorResponse) ResponseMeta() MetaResponse { return e.Meta }
 func (e ErrorResponse) Error() string {
 	return fmt.Sprintf("status: %d - message: %s - errors: %+v", e.ResponseCode(), e.ResponseMessage(), e.Errors)
 }
 
-func NewHttpError(code int, message string, errors []string, payload interface{}) RestError {
+func NewHttpError(code int, message string, errors []string, payload any) RestError {
 	return ErrorResponse{
 		Meta: MetaResponse{
 			Success:    false,
@@ -103,15 +103,15 @@ func NewParseSQLUniqueError(err error) RestError {
 	}
 }
 
-func NewHttpBadRequest(errors []string, payload interface{}) RestError {
+func NewHttpBadRequest(errors []string, payload any) RestError {
 	return NewHttpError(http.StatusBadRequest, ErrBadRequest, errors, payload)
 }
 
-func NewHttpValidationError(payload interface{}) RestError {
-	return NewHttpError(http.StatusBadRequest, "validation error", []string{"validation error"}, payload)
+func NewHttpValidationError(payload any) RestError {
+	return NewHttpError(http.StatusBadRequest, "validation error", []string{"validation.error"}, payload)
 }
 
-func NewHttpNotFound(errors []string, payload interface{}) RestError {
+func NewHttpNotFound(errors []string, payload any) RestError {
 	return NewHttpError(http.StatusNotFound, ErrNotFound, errors, payload)
 }
 
@@ -119,7 +119,7 @@ func NewHttpInternalServerError(message string) RestError {
 	return NewHttpError(http.StatusInternalServerError, ErrInternalServerError, []string{message}, nil)
 }
 
-func NewHttpUnauthorized(errors []string, payload interface{}) RestError {
+func NewHttpUnauthorized(errors []string, payload any) RestError {
 	return NewHttpError(http.StatusUnauthorized, ErrUnauthorized, errors, payload)
 }
 
