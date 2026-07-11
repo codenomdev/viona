@@ -104,7 +104,7 @@ func NewTranslator(c *config.Config) (tr i18n.Translator, err error) {
 	}
 	LanguageOptions = s.LangOption
 	for _, option := range LanguageOptions {
-		option.Label = fmt.Sprintf("%s (%d%%)", option.Label, option.Progress)
+		option.Label = fmt.Sprintf("%s", option.Label)
 	}
 	return GlobalTrans, err
 }

@@ -15,4 +15,5 @@ func NewRoute(h *Handler) *Route {
 func (r *Route) RegisterTransRoute(e *echo.Group) {
 	group := e.Group("/language")
 	group.GET("/get", r.h.GetLanguage())
+	group.GET("/options", r.h.GetLanguageOptions())
 }

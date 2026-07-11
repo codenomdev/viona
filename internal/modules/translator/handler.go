@@ -31,3 +31,12 @@ func (h *Handler) GetLanguage() echo.HandlerFunc {
 		return c.JSON(response.ParseHttpResponse(success))
 	}
 }
+
+// Get list language available
+func (h *Handler) GetLanguageOptions() echo.HandlerFunc {
+	return func(c *echo.Context) error {
+		trans := translator.LanguageOptions
+		success := response.NewHttpOK(trans)
+		return c.JSON(response.ParseHttpResponse(success))
+	}
+}
