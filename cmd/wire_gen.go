@@ -10,12 +10,19 @@ import (
 	"context"
 	"github.com/codenomdev/viona/internal/apps"
 	"github.com/codenomdev/viona/internal/apps/routes"
+	"github.com/codenomdev/viona/internal/modules/auth/handler"
+	"github.com/codenomdev/viona/internal/modules/auth/route"
+	service3 "github.com/codenomdev/viona/internal/modules/auth/service"
 	"github.com/codenomdev/viona/internal/modules/plugin"
 	"github.com/codenomdev/viona/internal/modules/setting"
-	"github.com/codenomdev/viona/internal/modules/setting/repository"
-	"github.com/codenomdev/viona/internal/modules/setting/service"
+	repository3 "github.com/codenomdev/viona/internal/modules/setting/repository"
+	service4 "github.com/codenomdev/viona/internal/modules/setting/service"
 	"github.com/codenomdev/viona/internal/modules/static"
 	translator2 "github.com/codenomdev/viona/internal/modules/translator"
+	"github.com/codenomdev/viona/internal/modules/user/repository"
+	"github.com/codenomdev/viona/internal/modules/user/service"
+	repository2 "github.com/codenomdev/viona/internal/modules/user_verify/repository"
+	service2 "github.com/codenomdev/viona/internal/modules/user_verify/service"
 	"github.com/codenomdev/viona/pkg/config"
 	"github.com/codenomdev/viona/pkg/db/gorm"
 	"github.com/codenomdev/viona/pkg/log"
@@ -31,8 +38,15 @@ func initApplication(ctx context.Context, cfg *config.Config, log2 log.Logger) (
 	}
 	repositoryRepository := repository.NewRepository(db)
 	serviceService := service.NewService(db, repositoryRepository)
-	handler := setting.NewHandler(serviceService)
-	route := setting.NewRoute(handler)
+	repository4 := repository2.NewRepository(db)
+	service5 := service2.NewService(db, repository4)
+	service6 := service3.NewService(db, serviceService, service5)
+	handlerHandler := handler.NewHandler(service6)
+	routeRoute := route.NewAuthRoute(handlerHandler)
+	repository5 := repository3.NewRepository(db)
+	service7 := service4.NewService(db, repository5)
+	settingHandler := setting.NewHandler(service7)
+	settingRoute := setting.NewRoute(settingHandler)
 	pluginHandler := plugin.NewHandler()
 	pluginRoute := plugin.NewRoute(pluginHandler)
 	i18nTranslator, err := translator.NewTranslator(cfg)
@@ -42,7 +56,7 @@ func initApplication(ctx context.Context, cfg *config.Config, log2 log.Logger) (
 	}
 	translatorHandler := translator2.NewHandler(i18nTranslator)
 	translatorRoute := translator2.NewRoute(translatorHandler)
-	registerApiRoutes := routes.NewApiRoutes(route, pluginRoute, translatorRoute)
+	registerApiRoutes := routes.NewApiRoutes(routeRoute, settingRoute, pluginRoute, translatorRoute)
 	staticHandler := static.NewStaticHandler()
 	staticRoutes := static.NewStaticRoute(staticHandler)
 	uiRoutes := routes.NewUIRoutes(staticRoutes)

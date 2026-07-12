@@ -9,6 +9,8 @@ import (
 	"github.com/codenomdev/viona/internal/modules/user/dto"
 	"github.com/codenomdev/viona/internal/modules/user/repository"
 	"github.com/codenomdev/viona/pkg/response"
+	"github.com/codenomdev/viona/pkg/translator"
+	"github.com/codenomdev/viona/pkg/validator"
 	"gorm.io/gorm"
 )
 
@@ -51,9 +53,11 @@ func (s *service) CreateNew(ctx context.Context, tx *gorm.DB, req *dto.RequestCr
 
 		switch {
 		case strings.Contains(errMsg, "email"):
-			return nil, response.NewHttpConflict([]string{
-				"email already exist",
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "email",
+				ErrorMsg:   translator.Tr(translator.GetLangByCtx(ctx), "validation.email_already_exists"),
 			})
+			return nil, response.NewHttpValidationError(errFields)
 
 		case strings.Contains(errMsg, "username"):
 			return nil, response.NewHttpConflict([]string{

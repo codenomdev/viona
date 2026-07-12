@@ -11,7 +11,7 @@ import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { errorCodeStore, loggedUserInfoStore } from '@/stores';
 import { getCurrentLang } from '@/utils/localize';
-import { ApiResponse } from '@/common/interface';
+import { ApiResponse, FieldError, ValidationError } from '@/common/interface';
 
 import { floppyNavigation } from './floppyNavigation';
 import { isIgnoredPath, IGNORE_PATH_LIST } from './guard';
@@ -78,18 +78,23 @@ class Request {
 
         const response = errBody as ApiResponse;
         const data = response?.data || {};
+        const payload = response?.payload as ValidationError[];
         const msg = response?.meta?.message || '';
+        const errors = response.errors ?? [];
 
         const errorObject: {
-          code: any;
+          code: number;
           msg: string;
           data: any;
+          payload: ValidationError[];
+          errors?: FieldError[] | string[];
           isError?: boolean;
-          list?: any[];
         } = {
           code: status,
           msg,
           data,
+          payload,
+          errors,
         };
 
         if (status === 400) {
@@ -116,15 +121,20 @@ class Request {
             return Promise.reject(false);
           }
 
-          if (Array.isArray(data) && data.length > 0) {
-            errorObject.isError = true;
-            errorObject.list = data;
-            return Promise.reject(errorObject);
-          }
-
-          if (!data || Object.keys(data).length <= 0) {
-            console.warn('Modal: ', msg);
-            return Promise.reject(false);
+          if (
+            Array.isArray(errors) &&
+            errors.some(
+              (err) => typeof err === 'string' && err === 'validation.error',
+            ) &&
+            Array.isArray(payload)
+          ) {
+            return Promise.reject({
+              code: status,
+              msg,
+              errors,
+              payload,
+              isError: true,
+            });
           }
         }
 
@@ -201,6 +211,13 @@ class Request {
           console.error(
             `Request failed with status code ${status}, ${msg || ''}`,
           );
+        }
+
+        if (errors.length > 0) {
+          return Promise.reject({
+            ...errorObject,
+            msg: errors[0],
+          });
         }
 
         return Promise.reject(errorObject);

@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { loginSettingStore } from '@/stores';
 import { FormDataType, RegisterReqParams } from '@/common/interface';
 import usePageTags from '@/hooks/usePageTags';
-import { scrollToElementTop } from '@/utils/common';
+import { handleFormError, scrollToElementTop } from '@/utils/common';
 import { register } from '@/services/common';
 
 const passwordRules = (password: string) => {
@@ -34,7 +34,13 @@ const passwordRules = (password: string) => {
 const Index: React.FC = () => {
   const { t } = useTranslation('translation');
   const registerSetting = loginSettingStore((state) => state.login);
+  const nameRegex = /^[\w.-\s]{2,30}$/;
   const [formData, setFormData] = useState<FormDataType>({
+    fullname: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
     email: {
       value: '',
       isInvalid: false,
@@ -47,10 +53,53 @@ const Index: React.FC = () => {
     },
   });
 
+  const handleChange = (params: FormDataType) => {
+    setFormData({ ...formData, ...params });
+  };
+
   const checkValidated = (): boolean => {
     let bol = true;
 
-    const { email, pass } = formData;
+    const { fullname, email, pass } = formData;
+
+    if (!fullname.value) {
+      bol = false;
+      formData.fullname = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.validation.required'),
+      };
+    } else if (fullname.value.length < 4 || fullname.value.length > 170) {
+      bol = false;
+      formData.fullname = {
+        value: fullname.value,
+        isInvalid: true,
+        errorMsg: t('form.validation.fullname_range', { min: 4, max: 170 }),
+      };
+    } else if (!nameRegex.test(fullname.value)) {
+      bol = false;
+      formData.fullname = {
+        value: fullname.value,
+        isInvalid: true,
+        errorMsg: t('form.validation.character'),
+      };
+    }
+
+    if (!email.value) {
+      bol = false;
+      formData.email = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.validation.required'),
+      };
+    } else if (email.value.length < 4 || email.value.length > 170) {
+      bol = false;
+      formData.email = {
+        value: email.value,
+        isInvalid: true,
+        errorMsg: t('form.validation.email_range', { min: 4, max: 230 }),
+      };
+    }
 
     if (!email.value) {
       bol = false;
@@ -102,11 +151,22 @@ const Index: React.FC = () => {
     }
 
     const params: RegisterReqParams = {
+      fullname: formData.fullname.value,
       email: formData.email.value,
       password: formData.pass.value,
     };
 
-    register(params);
+    register(params).catch((err) => {
+      if (err.isError) {
+        const data = handleFormError(err.payload, formData);
+        setFormData({
+          ...data,
+        });
+        const ele = document.getElementById(err.payload[0].error_field);
+        scrollToElementTop(ele);
+      }
+      console.error(err);
+    });
   };
 
   const handleSubmit = (event: any) => {
@@ -135,9 +195,34 @@ const Index: React.FC = () => {
       </CardHeader>
       <CardContent>
         {showFormSignup && (
-          <form noValidate onSubmit={handleSubmit}>
+          <form
+            noValidate
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            autoCorrect="off">
             <div className="flex flex-col gap-6">
               <div className="grid">
+                <Field className="mb-5">
+                  <FieldLabel htmlFor="fullname">
+                    {t('form.label.fullname')}
+                  </FieldLabel>
+                  <Input
+                    id="fullname"
+                    className="h-11"
+                    value={formData.fullname.value}
+                    aria-invalid={formData.fullname.isInvalid}
+                    onChange={(e) =>
+                      handleChange({
+                        fullname: {
+                          value: e.target.value,
+                          isInvalid: false,
+                          errorMsg: '',
+                        },
+                      })
+                    }
+                  />
+                  <FieldError>{formData.fullname.errorMsg}</FieldError>
+                </Field>
                 <Field className="mb-5">
                   <FieldLabel htmlFor="email">
                     {t('form.label.email')}
@@ -148,15 +233,13 @@ const Index: React.FC = () => {
                     value={formData.email.value}
                     aria-invalid={formData.email.isInvalid}
                     onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
+                      handleChange({
                         email: {
-                          ...prev.email,
                           value: e.target.value,
                           isInvalid: false,
                           errorMsg: '',
                         },
-                      }))
+                      })
                     }
                   />
                   <FieldError>{formData.email.errorMsg}</FieldError>
@@ -172,15 +255,13 @@ const Index: React.FC = () => {
                     value={formData.pass.value}
                     aria-invalid={formData.pass.isInvalid}
                     onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
+                      handleChange({
                         pass: {
-                          ...prev.pass,
                           value: e.target.value,
                           isInvalid: false,
                           errorMsg: '',
                         },
-                      }))
+                      })
                     }
                   />
                   <FieldError>{formData.pass.errorMsg}</FieldError>
@@ -244,15 +325,6 @@ const Index: React.FC = () => {
                     </div>
                   </div>
                 </Field>
-                {/* {loginSetting.allow_user_recover && (
-                <div className="mb-4 grid justify-items-end text-right">
-                  <Link
-                    to="/auth/account-recovery"
-                    className="text-primary text-sm font-semibold hover:text-primary/80">
-                    {t('form.label.forgot_password')}
-                  </Link>
-                </div>
-              )} */}
                 <Button type="submit" size="lg">
                   {t('form.sign_up')}
                 </Button>
