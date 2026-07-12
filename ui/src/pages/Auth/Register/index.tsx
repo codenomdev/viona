@@ -195,7 +195,11 @@ const Index: React.FC = () => {
       </CardHeader>
       <CardContent>
         {showFormSignup && (
-          <form noValidate onSubmit={handleSubmit}>
+          <form
+            noValidate
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            autoCorrect="off">
             <div className="flex flex-col gap-6">
               <div className="grid">
                 <Field className="mb-5">

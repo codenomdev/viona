@@ -129,7 +129,11 @@ const Index: React.FC = () => {
         <CardDescription>{t('page.sign_in.desc')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form noValidate onSubmit={handleSubmit}>
+        <form
+          noValidate
+          onSubmit={handleSubmit}
+          autoComplete="off"
+          autoCorrect="off">
           <div className="flex flex-col gap-6">
             <div className="grid">
               <Field className="mb-5">
@@ -153,7 +157,7 @@ const Index: React.FC = () => {
                 />
                 <FieldError>{formData.email.errorMsg}</FieldError>
               </Field>
-              <Field className="mb-3">
+              <Field className="mb-5">
                 <FieldLabel htmlFor="pass">
                   {t('form.label.password')}
                 </FieldLabel>

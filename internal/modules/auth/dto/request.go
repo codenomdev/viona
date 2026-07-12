@@ -1,5 +1,7 @@
 package dto
 
+import "github.com/codenomdev/viona/pkg/validator"
+
 type (
 	LoginWithEmailRequest struct {
 		Email      string `json:"email" validate:"required,email"`
@@ -12,3 +14,7 @@ type (
 		Password string `json:"password" validate:"required,min=8,max=16"`
 	}
 )
+
+func (r *RegisterWithEmailRequest) Check() ([]*validator.FormErrorField, error) {
+	return nil, nil
+}
